@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Classify treatment regimes</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Overview</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="simulation.html">Registry data simulation</a>
+</li>
+<li>
+  <a href="calc_time_nodes.html">Calculate treatment regimes</a>
+</li>
+<li>
+  <a href="ltmle.html">L-TMLE analysis</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Classify treatment regimes</h1>
+
+</div>
+
+
+<div id="classify-treatment-regimes" class="section level3">
+<h3>Classify treatment regimes</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># completely fake distribution; to incorporate summary statistics info (train lkd objs with fake+intermediate samples) later</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># fully ATC prescription based; ICD-8/10 or other info later</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd(dirname(rstudioapi::getActiveDocumentContext()$path))</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd(&quot;..&quot;)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>n_total_population <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>dt_atc <span class="ot">&lt;-</span> <span class="fu">simPrescriptionData_atc</span>(<span class="at">n =</span> n_total_population, <span class="at">startDate =</span> <span class="st">&quot;2015-01-01&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>dt_subject <span class="ot">&lt;-</span> <span class="fu">simPop</span>(<span class="at">n =</span> n_total_population)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># target population</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># start any second line drugs after 2015; record the date</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>dt_target_population <span class="ot">&lt;-</span> dt_atc[, .(<span class="at">if_any_2nd_line =</span> <span class="fu">any</span>(atc <span class="sc">%in%</span> <span class="fu">c</span>(glp1, dpp4, SGLT2i))), pnr]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_atc[, .(<span class="at">date =</span> eksd[(<span class="fu">which</span>(atc <span class="sc">%in%</span> <span class="fu">c</span>(glp1, dpp4, SGLT2i)))] <span class="sc">%&gt;%</span> sort <span class="sc">%&gt;%</span> first), pnr], on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, first_date_2nd_line <span class="sc">:</span><span class="er">=</span> i.date]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_atc[, .(<span class="at">date =</span> eksd[(<span class="fu">which</span>(atc <span class="sc">%in%</span> <span class="fu">c</span>(glp1)))] <span class="sc">%&gt;%</span> sort <span class="sc">%&gt;%</span> first), pnr], on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, first_date_glp1 <span class="sc">:</span><span class="er">=</span> i.date]</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude prior dementia</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_atc[, .(<span class="at">date =</span> eksd[(<span class="fu">which</span>(atc <span class="sc">%in%</span> <span class="fu">c</span>(dementia)))] <span class="sc">%&gt;%</span> sort <span class="sc">%&gt;%</span> first), pnr], on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, first_date_dementia <span class="sc">:</span><span class="er">=</span> i.date]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>dt_target_population[, <span class="st">&quot;if_prior_dementia&quot;</span> <span class="sc">:</span><span class="er">=</span> (first_date_dementia <span class="sc">&lt;</span> <span class="fu">max</span>(first_date_2nd_line, first_date_glp1, <span class="at">na.rm =</span> T)), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span></code></pre></div>
+<pre><code>## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf
+
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
+## returning -Inf</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dt_target_population[, <span class="st">&quot;if_still_in&quot;</span> <span class="sc">:</span><span class="er">=</span> if_any_2nd_line <span class="sc">&amp;</span> (<span class="fu">is.na</span>(if_prior_dementia) <span class="sc">|</span> <span class="sc">!</span>if_prior_dementia)]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude age under 50</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_subject, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, age <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(first_date_2nd_line <span class="sc">-</span> i.birthdate)<span class="sc">/</span><span class="fl">365.25</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dt_target_population[, if_still_in <span class="sc">:</span><span class="er">=</span> if_still_in <span class="sc">&amp;</span> (age <span class="sc">&gt;=</span> <span class="dv">50</span>)]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># find people with &lt;12mos gap of glp1 use among target population</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>max.date <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dt_atc<span class="sc">$</span>eksd) <span class="sc">%&gt;%</span> max</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>dt_atc[dt_target_population, target_glp1_dates <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(i.if_still_in <span class="sc">&amp;</span> (atc <span class="sc">%in%</span> glp1), eksd, <span class="cn">NA</span>), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]  <span class="co"># for target population, record glp1 dates</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>dt_atc[dt_target_population, target_2nd_line_dates <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(i.if_still_in <span class="sc">&amp;</span> (atc <span class="sc">%in%</span> <span class="fu">c</span>(glp1, dpp4, SGLT2i)), eksd, <span class="cn">NA</span>), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]  <span class="co"># for target population, record glp1 dates</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_atc[, .(<span class="fu">sort</span>(target_glp1_dates)), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>][<span class="sc">!</span><span class="fu">is.na</span>(V1), ][, .(<span class="at">test =</span> <span class="fu">all</span>(<span class="fu">diff</span>(<span class="fu">c</span>(V1, max.date)) <span class="sc">&lt;</span> <span class="dv">270</span>)), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>], </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;if_target_glp1&quot;</span> <span class="sc">:</span><span class="er">=</span> i.test,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                     on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># if there is no glp1 use at all, but in target population, label as not glp1 group</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>dt_target_population[, if_target_glp1 <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(if_target_glp1), <span class="fu">ifelse</span>(if_still_in, F, <span class="cn">NA</span>), if_target_glp1)]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>dt_target_population<span class="sc">$</span>if_target_glp1 <span class="sc">%&gt;%</span> <span class="fu">table</span>(<span class="at">useNA =</span> <span class="st">&quot;a&quot;</span>)</span></code></pre></div>
+<pre><code>## .
+## FALSE  TRUE  &lt;NA&gt; 
+##   268     3   729</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dt_target_population<span class="sc">$</span>if_still_in <span class="sc">%&gt;%</span> <span class="fu">table</span>(<span class="at">useNA =</span> <span class="st">&quot;a&quot;</span>)</span></code></pre></div>
+<pre><code>## .
+## FALSE  TRUE  &lt;NA&gt; 
+##   729   271     0</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define id and baseline nodes</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dt_tmle <span class="ot">&lt;-</span> dt_target_population[<span class="fu">which</span>(if_still_in), <span class="fu">c</span>(<span class="st">&quot;pnr&quot;</span>,<span class="st">&quot;age&quot;</span>)]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_subject, sex <span class="sc">:</span><span class="er">=</span> (i.sex <span class="sc">==</span> <span class="st">&quot;female&quot;</span>)<span class="sc">*</span><span class="dv">1</span>, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># define wide format A1t nodes for glp1 use</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_target_population, if_glp1_group <span class="sc">:</span><span class="er">=</span> i.if_target_glp1, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_target_population, first_date_glp1 <span class="sc">:</span><span class="er">=</span> i.first_date_glp1, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_target_population, first_date_2nd_line <span class="sc">:</span><span class="er">=</span> i.first_date_2nd_line, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>date_cuts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">paste0</span>(<span class="dv">2015</span><span class="sc">:</span><span class="dv">2020</span>, <span class="st">&quot;-01-01&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">sapply</span>(as.Date))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>date_to_t <span class="ot">&lt;-</span> <span class="cf">function</span>(date, start) {</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  (date <span class="sc">-</span> start) <span class="sc">%/%</span> <span class="fl">365.25</span> <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">date_to_t</span>(<span class="fu">c</span>(<span class="cn">NA</span>, date_cuts), date_cuts[<span class="dv">1</span>])</span></code></pre></div>
+<pre><code>## [1] NA  1  1  3  4  5  5</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># max should be the maximum time point</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fill_zero <span class="ot">&lt;-</span> <span class="cf">function</span>(vec, <span class="at">max =</span> <span class="dv">5</span>) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, max)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  temp[vec] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(temp)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>event_free <span class="ot">&lt;-</span> <span class="cf">function</span>(i, <span class="at">max =</span> <span class="dv">5</span>) {</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, max)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(i)) temp[i<span class="sc">:</span>max] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(temp)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># find all time points with glp1 prescription</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="fu">paste0</span>(<span class="st">&quot;A1_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)) dt_tmle[, (x) <span class="sc">:</span><span class="er">=</span> <span class="dv">0</span>]</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_atc[pnr <span class="sc">%in%</span> dt_tmle<span class="sc">$</span>pnr, <span class="fu">ifelse</span>(<span class="fu">is.na</span>(target_glp1_dates), <span class="dv">0</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">date_to_t</span>(target_glp1_dates, <span class="fu">min</span>(<span class="fu">as.numeric</span>(target_glp1_dates), <span class="at">na.rm =</span> T))</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>][V1 <span class="sc">!=</span> <span class="dv">0</span>, ][, V1 <span class="sc">%&gt;%</span> as.vector <span class="sc">%&gt;%</span> fill_zero <span class="sc">%&gt;%</span> as.list, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>] </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>, <span class="st">&#39;:=&#39;</span> (<span class="fu">paste0</span>(<span class="st">&quot;A1_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;i.V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>dt_tmle[<span class="fu">which</span>(if_glp1_group), ]</span></code></pre></div>
+<pre><code>##    pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2 A1_3 A1_4 A1_5
+## 1: 485 58.97439   0          TRUE      2019-01-01          2016-08-14    1    0    0    0    0
+## 2: 843 67.22214   1          TRUE      2019-06-07          2015-04-15    1    0    0    0    0
+## 3: 991 71.62296   0          TRUE      2019-05-29          2015-02-28    1    0    0    0    0</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dt_tmle <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##     pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2 A1_3 A1_4 A1_5
+##  1:   3 65.94318   0         FALSE      2015-05-01          2015-01-01    1    0    0    1    1
+##  2:   7 55.09916   1         FALSE            &lt;NA&gt;          2015-09-12    0    0    0    0    0
+##  3:  11 50.26506   0         FALSE      2015-03-30          2015-03-30    1    0    1    1    1
+##  4:  18 52.10466   0         FALSE      2015-01-01          2015-01-01    1    0    0    0    0
+##  5:  23 65.47902   0         FALSE      2015-07-10          2015-05-06    1    1    0    0    0
+##  6:  28 71.94788   0         FALSE      2015-07-25          2015-07-25    1    0    0    1    1
+##  7:  33 77.81752   1         FALSE      2015-01-01          2015-01-01    1    1    0    1    0
+##  8:  35 76.63310   0         FALSE      2015-01-01          2015-01-01    1    1    1    0    0
+##  9:  38 66.13907   0         FALSE      2015-06-14          2015-06-14    1    0    0    0    0
+## 10:  49 53.72398   0         FALSE      2015-12-10          2015-05-25    1    0    1    0    0</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># for target population, collect hypertension prescription dates</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dt_atc[dt_target_population, target_ht_dates <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(i.if_still_in <span class="sc">&amp;</span> (atc <span class="sc">%in%</span> hypertension), eksd, <span class="cn">NA</span>), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]  <span class="co"># for target population, record glp1 dates</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make ht nodes</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="fu">paste0</span>(<span class="st">&quot;L_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)) dt_tmle[, (x) <span class="sc">:</span><span class="er">=</span> <span class="dv">0</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_atc[pnr <span class="sc">%in%</span> dt_tmle<span class="sc">$</span>pnr, <span class="fu">ifelse</span>(<span class="fu">is.na</span>(target_ht_dates), <span class="dv">0</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">date_to_t</span>(target_ht_dates, <span class="fu">ifelse</span>(<span class="fu">any</span>(<span class="sc">!</span><span class="fu">is.na</span>(target_glp1_dates)), <span class="fu">min</span>(<span class="fu">as.numeric</span>(target_glp1_dates), <span class="at">na.rm =</span> T), <span class="fu">min</span>(<span class="fu">as.numeric</span>(target_2nd_line_dates), <span class="at">na.rm =</span> T)) )</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>][V1 <span class="sc">&gt;</span> <span class="dv">0</span>, ][, V1 <span class="sc">%&gt;%</span> as.vector <span class="sc">%&gt;%</span> fill_zero <span class="sc">%&gt;%</span> as.list, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>] </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>, <span class="st">&#39;:=&#39;</span> (<span class="fu">paste0</span>(<span class="st">&quot;L_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;i.V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># make event process</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>dt_tmle[dt_target_population[pnr <span class="sc">%in%</span> dt_tmle<span class="sc">$</span>pnr, <span class="fu">date_to_t</span>(first_date_dementia <span class="sc">%&gt;%</span> as.numeric, <span class="fu">max</span>(first_date_2nd_line, first_date_glp1, <span class="at">na.rm =</span> T) <span class="sc">%&gt;%</span> as.numeric  ), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        [, V1 <span class="sc">%&gt;%</span> event_free <span class="sc">%&gt;%</span> as.list, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>] </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>,   <span class="st">&#39;:=&#39;</span> (<span class="fu">paste0</span>(<span class="st">&quot;Y_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;i.V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># censoring process; study ends</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>last_date <span class="ot">&lt;-</span> date_cuts <span class="sc">%&gt;%</span> last</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>censoring_free <span class="ot">&lt;-</span> <span class="cf">function</span>(start, <span class="at">last_date =</span> date_cuts <span class="sc">%&gt;%</span> last, event_t, <span class="at">max =</span> <span class="dv">5</span>) {</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.na</span>(event_t)) {</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(((start <span class="sc">+</span> <span class="fl">365.25</span> <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)) <span class="sc">&lt;=</span> last_date) <span class="sc">*</span> <span class="dv">1</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, max)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    temp[<span class="dv">1</span><span class="sc">:</span>event_t] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>dt_tmle[, event_t <span class="sc">:</span><span class="er">=</span> <span class="fu">which</span>(<span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;Y_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)) <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> first, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>dt_tmle[, <span class="fu">paste0</span>(<span class="st">&quot;C_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">:</span><span class="er">=</span> (<span class="fu">max</span>(first_date_2nd_line, first_date_glp1, <span class="at">na.rm =</span> T) <span class="sc">%&gt;%</span> as.numeric) <span class="sc">%&gt;%</span> <span class="fu">censoring_free</span>(<span class="at">event_t =</span> event_t) <span class="sc">%&gt;%</span> as.list, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>dt_tmle[, event_t <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dt_tmle, <span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">here</span>(),<span class="st">&quot;/data/dt_tmle_20210712.rds&quot;</span>))</span></code></pre></div>
+<div id="top-10-rows-subjects-of-simulated-data" class="section level4">
+<h4>Top 10 rows (subjects) of simulated data</h4>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+pnr
+</th>
+<th style="text-align:right;">
+age
+</th>
+<th style="text-align:right;">
+sex
+</th>
+<th style="text-align:left;">
+if_glp1_group
+</th>
+<th style="text-align:left;">
+first_date_glp1
+</th>
+<th style="text-align:left;">
+first_date_2nd_line
+</th>
+<th style="text-align:right;">
+A1_1
+</th>
+<th style="text-align:right;">
+A1_2
+</th>
+<th style="text-align:right;">
+A1_3
+</th>
+<th style="text-align:right;">
+A1_4
+</th>
+<th style="text-align:right;">
+A1_5
+</th>
+<th style="text-align:right;">
+L_1
+</th>
+<th style="text-align:right;">
+L_2
+</th>
+<th style="text-align:right;">
+L_3
+</th>
+<th style="text-align:right;">
+L_4
+</th>
+<th style="text-align:right;">
+L_5
+</th>
+<th style="text-align:right;">
+Y_1
+</th>
+<th style="text-align:right;">
+Y_2
+</th>
+<th style="text-align:right;">
+Y_3
+</th>
+<th style="text-align:right;">
+Y_4
+</th>
+<th style="text-align:right;">
+Y_5
+</th>
+<th style="text-align:right;">
+C_1
+</th>
+<th style="text-align:right;">
+C_2
+</th>
+<th style="text-align:right;">
+C_3
+</th>
+<th style="text-align:right;">
+C_4
+</th>
+<th style="text-align:right;">
+C_5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+65.94318
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-05-01
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+55.09916
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+2015-09-12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+50.26506
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-03-30
+</td>
+<td style="text-align:left;">
+2015-03-30
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+52.10466
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+65.47902
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-07-10
+</td>
+<td style="text-align:left;">
+2015-05-06
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+71.94788
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-07-25
+</td>
+<td style="text-align:left;">
+2015-07-25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+77.81752
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+76.63310
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:left;">
+2015-01-01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+66.13907
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-06-14
+</td>
+<td style="text-align:left;">
+2015-06-14
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+53.72398
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+2015-12-10
+</td>
+<td style="text-align:left;">
+2015-05-25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

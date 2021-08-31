@@ -2,13 +2,17 @@ name: "MICS WASH BOD"
 navbar:
   title: "Overview"
   left:
-    - text: "Methods"
-      href: methods.html
+    - text: "Registry data simulation"
+      href: simulation.html
+    - text: "Calculate treatment regimes"
+      href: calc_time_nodes.html  
+    - text: "L-TMLE analysis"
+      href: ltmle.html    
 
 output_dir: "."
 output:
   html_document:
     theme: journal
-    highlight: espresso
+    highlight: pygments
 #    include:
 #      after_body: _footer.html
