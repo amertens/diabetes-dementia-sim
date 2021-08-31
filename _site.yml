@@ -1,0 +1,14 @@
+name: "MICS WASH BOD"
+navbar:
+  title: "Overview"
+  left:
+    - text: "Methods"
+      href: methods.html
+
+output_dir: "."
+output:
+  html_document:
+    theme: journal
+    highlight: espresso
+#    include:
+#      after_body: _footer.html

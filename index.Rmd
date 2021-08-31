@@ -1,0 +1,14 @@
+---
+title: "Diabetes-dementia dynamics simulation"
+author:  "Andrew Mertens"
+output:
+  html_document:
+    toc: true  
+    toc_float: true  
+---
+
+----
+
+### Background  
+
+  (Fill in)

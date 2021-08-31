@@ -1,0 +1,3 @@
+[submodule "MICS-WASH-BOD"]
+	path = MICS-WASH-BOD
+	url = https://github.com/amertens/MICS-WASH-BOD
