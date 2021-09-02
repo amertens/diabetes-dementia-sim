@@ -1,6 +1,6 @@
 ---
-title: "Diabetes-dementia dynamics simulation"
-author:  "Andrew Mertens, Zeyi Wang, Nerissa Nance, Maya Petersen"
+title: "Diabetes-dementia dynamics simulation results"
+#author:  "Andrew Mertens, Zeyi Wang, Nerissa Nance, Thomas Gerds, Maya Petersen"
 output:
   html_document:
     toc: true  
@@ -9,6 +9,43 @@ output:
 
 ----
 
+### Note on this simulation results website  
+
+- This simulation project is actively being worked on, and this site is in the process of 1) being updated to better describe and document simulation steps and 2) add new simulations as Zeyi and others complete them.
+
 ### Background  
 
-  (Fill in)
+A recent Danish nationwide registry study aimed to assess if specific anti-diabetic treatment regimes are associated with a protective effect for the development of dementia. Our current conclusion based on hazard ratios defined in the context of a Cox regression model with time-dependent exposure is undecided: either the drug protects against dementia or dementia protects against the drug. Causal analysis is needed.
+
+Medical hypotheses:
+  *  Any protective effect of diabetes treatment on development of dementia will not be acute but accumulated over a longer treatment period.
+  *  We search for long term cumulative effects on the vascular system and neuroprotection.
+  *  Any effect of accumulated diabetes treatment is expected to persist even after change of therapy.
+  *  The effect of the treatment is assumed to be the higher the longer the time under treatment.
+
+In a prior analysis, we examined the effect of second line regimens on dementia using conventional regression analyses. Due to the presence of time-dependent confounding, additional analysis is needed in order to model the causal effect of second line diabetes medication on dementia. 
+
+### Simulation study  
+
+This website show the setup and results from a simulation study we are conducting to assess estimator performance, benchmark computation time, and finalize the coding of time nodes, covariates, and the TMLE implementation with outcome-blind data. 
+
+We simulate registry data using the “heaven” R package to simulate population data, medication data, and admission data. We created our cohort using exclusion criteria defined above (Figure 1). We then created longitudinal exposure, outcome and covariate data using the rules supplied in the Observed Data section above. We adjusted simulated data distribution to be 1) completely random, 2) following known true distribution, or 3) incorporating summary statistics of marginal distributions of key variables from the real registry data. 
+
+We estimate both the causal parameters laid out above, comparing GLP1 usage to DPP4 or SGLT2 usage, using 6 month time nodes, a 5-year followup, and the “ltmle” R package. We account for administrative censoring and simulate the following covariates: age, sex, baseline hypertension, and index date. We considered the following algorithms in the SuperLearner library: SL.glm, SL.hal9001, and default options below. We simulate 5~20k and up to 200~220k subjects (the sample size we expect in the registry). For benchmark purposes, we focus on the following estimators: 1) treatment specific mean of cumulative risk or risk curve, under full exposure or stochastic intervention d1 or d2 defined above; 2) MSM model with time and accumulated exposure as regressors. 
+
+An example of typical MSM outputs with simulated data is attached on page XXXX; the estimator successfully identifies the increased risk as time increases and the reduced risk with more exposure; sample size n=10k. Please refer to Appendix C with the most recent updates. 
+
+
+#### Key tasks of benchmarks:
+
+Evaluate memory usage and computation time of the procedure of super learner fitting, tmle updates, and variance estimations; at different sample sizes, SL options, SI and MSM model choices, and variance methods. 
+
+Evaluate potential impact of different levels of finite sample positivity violation and rare outcomes; with simulated known distribution or summary statistics. 
+
+Finalize ltmle options and necessary code modifications (such as parallel SL, stochastic intervention, performance improvement for large data tables, etc.). 
+
+
+#### Default libraries:
+
+list("SL.glm", "SL.stepAIC", "SL.bayesglm", c("SL.glm", "screen.corP"), c("SL.step", "screen.corP"), c("SL.step.forward", "screen.corP"), c("SL.stepAIC", "screen.corP"), c("SL.step.interaction", "screen.corP"), c("SL.bayesglm", "screen.corP")
+

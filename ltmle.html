@@ -409,6 +409,12 @@ div.tocify {
 <li>
   <a href="ltmle.html">L-TMLE analysis</a>
 </li>
+<li>
+  <a href="ltmle.html">MSM dataset creation</a>
+</li>
+<li>
+  <a href="MSM.html">MSM L-TMLE analysis</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -554,6 +560,7 @@ div.tocify {
 <pre><code>## formula for A1_5:</code></pre>
 <pre><code>## A1_5 ~ age + sex + A1_1 + L_1 + A1_2 + L_2 + A1_3 + L_3 + A1_4 +     L_4</code></pre>
 <pre><code>## </code></pre>
+<pre><code>## speedglm failed, using glm instead. If you see a lot of this message and you have large absolute values in data[, Lnodes], you may get a speed performance improvement by rescaling these values.</code></pre>
 <pre><code>## Timing estimate unavailable</code></pre>
 <pre><code>## speedglm failed, using glm instead. If you see a lot of this message and you have large absolute values in data[, Lnodes], you may get a speed performance improvement by rescaling these values.
 ## speedglm failed, using glm instead. If you see a lot of this message and you have large absolute values in data[, Lnodes], you may get a speed performance improvement by rescaling these values.
@@ -580,7 +587,7 @@ div.tocify {
 </div>
 <div id="results-from-simple-simulation" class="section level3">
 <h3>Results from simple simulation</h3>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code></pre></div>
 <pre><code>## Estimator:  tmle 
 ## Call:
 ## ltmle(data = dt_use[sample(nrow(dt_tmle), 1000, T), ], Anodes = grep(&quot;^A1_&quot;, 

@@ -411,6 +411,12 @@ div.tocify {
 <li>
   <a href="ltmle.html">L-TMLE analysis</a>
 </li>
+<li>
+  <a href="ltmle.html">MSM dataset creation</a>
+</li>
+<li>
+  <a href="MSM.html">MSM L-TMLE analysis</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -454,32 +460,32 @@ div.tocify {
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude prior dementia</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_atc[, .(<span class="at">date =</span> eksd[(<span class="fu">which</span>(atc <span class="sc">%in%</span> <span class="fu">c</span>(dementia)))] <span class="sc">%&gt;%</span> sort <span class="sc">%&gt;%</span> first), pnr], on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, first_date_dementia <span class="sc">:</span><span class="er">=</span> i.date]</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>dt_target_population[, <span class="st">&quot;if_prior_dementia&quot;</span> <span class="sc">:</span><span class="er">=</span> (first_date_dementia <span class="sc">&lt;</span> <span class="fu">max</span>(first_date_2nd_line, first_date_glp1, <span class="at">na.rm =</span> T)), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span></code></pre></div>
-<pre><code>## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+<pre><code>## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf
 
-## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_, class = &quot;Date&quot;), : no non-missing arguments to max;
-## returning -Inf</code></pre>
+## Warning in max.default(structure(NA_real_, class = &quot;Date&quot;), structure(NA_real_,
+## class = &quot;Date&quot;), : no non-missing arguments to max; returning -Inf</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dt_target_population[, <span class="st">&quot;if_still_in&quot;</span> <span class="sc">:</span><span class="er">=</span> if_any_2nd_line <span class="sc">&amp;</span> (<span class="fu">is.na</span>(if_prior_dementia) <span class="sc">|</span> <span class="sc">!</span>if_prior_dementia)]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude age under 50</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dt_target_population[dt_subject, on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>, age <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(first_date_2nd_line <span class="sc">-</span> i.birthdate)<span class="sc">/</span><span class="fl">365.25</span>]</span>
@@ -536,22 +542,37 @@ div.tocify {
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>), by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>][V1 <span class="sc">!=</span> <span class="dv">0</span>, ][, V1 <span class="sc">%&gt;%</span> as.vector <span class="sc">%&gt;%</span> fill_zero <span class="sc">%&gt;%</span> as.list, by <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>] </span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>, <span class="st">&#39;:=&#39;</span> (<span class="fu">paste0</span>(<span class="st">&quot;A1_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;i.V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>dt_tmle[<span class="fu">which</span>(if_glp1_group), ]</span></code></pre></div>
-<pre><code>##    pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2 A1_3 A1_4 A1_5
-## 1: 485 58.97439   0          TRUE      2019-01-01          2016-08-14    1    0    0    0    0
-## 2: 843 67.22214   1          TRUE      2019-06-07          2015-04-15    1    0    0    0    0
-## 3: 991 71.62296   0          TRUE      2019-05-29          2015-02-28    1    0    0    0    0</code></pre>
+<pre><code>##    pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2
+## 1: 485 58.96891   0          TRUE      2019-01-01          2016-08-14    1    0
+## 2: 843 67.21666   1          TRUE      2019-06-07          2015-04-15    1    0
+## 3: 991 71.61748   0          TRUE      2019-05-29          2015-02-28    1    0
+##    A1_3 A1_4 A1_5
+## 1:    0    0    0
+## 2:    0    0    0
+## 3:    0    0    0</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dt_tmle <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div>
-<pre><code>##     pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2 A1_3 A1_4 A1_5
-##  1:   3 65.94318   0         FALSE      2015-05-01          2015-01-01    1    0    0    1    1
-##  2:   7 55.09916   1         FALSE            &lt;NA&gt;          2015-09-12    0    0    0    0    0
-##  3:  11 50.26506   0         FALSE      2015-03-30          2015-03-30    1    0    1    1    1
-##  4:  18 52.10466   0         FALSE      2015-01-01          2015-01-01    1    0    0    0    0
-##  5:  23 65.47902   0         FALSE      2015-07-10          2015-05-06    1    1    0    0    0
-##  6:  28 71.94788   0         FALSE      2015-07-25          2015-07-25    1    0    0    1    1
-##  7:  33 77.81752   1         FALSE      2015-01-01          2015-01-01    1    1    0    1    0
-##  8:  35 76.63310   0         FALSE      2015-01-01          2015-01-01    1    1    1    0    0
-##  9:  38 66.13907   0         FALSE      2015-06-14          2015-06-14    1    0    0    0    0
-## 10:  49 53.72398   0         FALSE      2015-12-10          2015-05-25    1    0    1    0    0</code></pre>
+<pre><code>##     pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1
+##  1:   3 65.93771   0         FALSE      2015-05-01          2015-01-01    1
+##  2:   7 55.09368   1         FALSE            &lt;NA&gt;          2015-09-12    0
+##  3:  11 50.25959   0         FALSE      2015-03-30          2015-03-30    1
+##  4:  18 52.09918   0         FALSE      2015-01-01          2015-01-01    1
+##  5:  23 65.47354   0         FALSE      2015-07-10          2015-05-06    1
+##  6:  28 71.94240   0         FALSE      2015-07-25          2015-07-25    1
+##  7:  33 77.81205   1         FALSE      2015-01-01          2015-01-01    1
+##  8:  35 76.62763   0         FALSE      2015-01-01          2015-01-01    1
+##  9:  38 66.13359   0         FALSE      2015-06-14          2015-06-14    1
+## 10:  49 53.71850   0         FALSE      2015-12-10          2015-05-25    1
+##     A1_2 A1_3 A1_4 A1_5
+##  1:    0    0    1    1
+##  2:    0    0    0    0
+##  3:    0    1    1    1
+##  4:    0    0    0    0
+##  5:    1    0    0    0
+##  6:    0    0    1    1
+##  7:    1    0    1    0
+##  8:    1    1    0    0
+##  9:    0    0    0    0
+## 10:    0    1    0    0</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># for target population, collect hypertension prescription dates</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dt_atc[dt_target_population, target_ht_dates <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(i.if_still_in <span class="sc">&amp;</span> (atc <span class="sc">%in%</span> hypertension), eksd, <span class="cn">NA</span>), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]  <span class="co"># for target population, record glp1 dates</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make ht nodes</span></span>
@@ -675,7 +696,7 @@ C_5
 3
 </td>
 <td style="text-align:right;">
-65.94318
+65.93771
 </td>
 <td style="text-align:right;">
 0
@@ -755,7 +776,7 @@ FALSE
 7
 </td>
 <td style="text-align:right;">
-55.09916
+55.09368
 </td>
 <td style="text-align:right;">
 1
@@ -835,7 +856,7 @@ NA
 11
 </td>
 <td style="text-align:right;">
-50.26506
+50.25959
 </td>
 <td style="text-align:right;">
 0
@@ -915,7 +936,7 @@ FALSE
 18
 </td>
 <td style="text-align:right;">
-52.10466
+52.09918
 </td>
 <td style="text-align:right;">
 0
@@ -995,7 +1016,7 @@ FALSE
 23
 </td>
 <td style="text-align:right;">
-65.47902
+65.47354
 </td>
 <td style="text-align:right;">
 0
@@ -1075,7 +1096,7 @@ FALSE
 28
 </td>
 <td style="text-align:right;">
-71.94788
+71.94240
 </td>
 <td style="text-align:right;">
 0
@@ -1155,7 +1176,7 @@ FALSE
 33
 </td>
 <td style="text-align:right;">
-77.81752
+77.81205
 </td>
 <td style="text-align:right;">
 1
@@ -1235,7 +1256,7 @@ FALSE
 35
 </td>
 <td style="text-align:right;">
-76.63310
+76.62763
 </td>
 <td style="text-align:right;">
 0
@@ -1315,7 +1336,7 @@ FALSE
 38
 </td>
 <td style="text-align:right;">
-66.13907
+66.13359
 </td>
 <td style="text-align:right;">
 0
@@ -1395,7 +1416,7 @@ FALSE
 49
 </td>
 <td style="text-align:right;">
-53.72398
+53.71850
 </td>
 <td style="text-align:right;">
 0

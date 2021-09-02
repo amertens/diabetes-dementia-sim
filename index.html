@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Andrew Mertens, Zeyi Wang, Nerissa Nance, Maya Petersen" />
 
 
-<title>Diabetes-dementia dynamics simulation</title>
+<title>Diabetes-dementia dynamics simulation results</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -315,6 +314,12 @@ div.tocify {
 <li>
   <a href="ltmle.html">L-TMLE analysis</a>
 </li>
+<li>
+  <a href="ltmle.html">MSM dataset creation</a>
+</li>
+<li>
+  <a href="MSM.html">MSM L-TMLE analysis</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -327,16 +332,40 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Diabetes-dementia dynamics simulation</h1>
-<h4 class="author">Andrew Mertens, Zeyi Wang, Nerissa Nance, Maya Petersen</h4>
+<h1 class="title toc-ignore">Diabetes-dementia dynamics simulation results</h1>
 
 </div>
 
 
 <hr />
+<div id="note-on-this-simulation-results-website" class="section level3">
+<h3>Note on this simulation results website</h3>
+<ul>
+<li>This simulation project is actively being worked on, and this site is in the process of 1) being updated to better describe and document simulation steps and 2) add new simulations as Zeyi and others complete them.</li>
+</ul>
+</div>
 <div id="background" class="section level3">
 <h3>Background</h3>
-<p>(Fill in)</p>
+<p>A recent Danish nationwide registry study aimed to assess if specific anti-diabetic treatment regimes are associated with a protective effect for the development of dementia. Our current conclusion based on hazard ratios defined in the context of a Cox regression model with time-dependent exposure is undecided: either the drug protects against dementia or dementia protects against the drug. Causal analysis is needed.</p>
+<p>Medical hypotheses: * Any protective effect of diabetes treatment on development of dementia will not be acute but accumulated over a longer treatment period. * We search for long term cumulative effects on the vascular system and neuroprotection. * Any effect of accumulated diabetes treatment is expected to persist even after change of therapy. * The effect of the treatment is assumed to be the higher the longer the time under treatment.</p>
+<p>In a prior analysis, we examined the effect of second line regimens on dementia using conventional regression analyses. Due to the presence of time-dependent confounding, additional analysis is needed in order to model the causal effect of second line diabetes medication on dementia.</p>
+</div>
+<div id="simulation-study" class="section level3">
+<h3>Simulation study</h3>
+<p>This website show the setup and results from a simulation study we are conducting to assess estimator performance, benchmark computation time, and finalize the coding of time nodes, covariates, and the TMLE implementation with outcome-blind data.</p>
+<p>We simulate registry data using the “heaven” R package to simulate population data, medication data, and admission data. We created our cohort using exclusion criteria defined above (Figure 1). We then created longitudinal exposure, outcome and covariate data using the rules supplied in the Observed Data section above. We adjusted simulated data distribution to be 1) completely random, 2) following known true distribution, or 3) incorporating summary statistics of marginal distributions of key variables from the real registry data.</p>
+<p>We estimate both the causal parameters laid out above, comparing GLP1 usage to DPP4 or SGLT2 usage, using 6 month time nodes, a 5-year followup, and the “ltmle” R package. We account for administrative censoring and simulate the following covariates: age, sex, baseline hypertension, and index date. We considered the following algorithms in the SuperLearner library: SL.glm, SL.hal9001, and default options below. We simulate 5~20k and up to 200~220k subjects (the sample size we expect in the registry). For benchmark purposes, we focus on the following estimators: 1) treatment specific mean of cumulative risk or risk curve, under full exposure or stochastic intervention d1 or d2 defined above; 2) MSM model with time and accumulated exposure as regressors.</p>
+<p>An example of typical MSM outputs with simulated data is attached on page XXXX; the estimator successfully identifies the increased risk as time increases and the reduced risk with more exposure; sample size n=10k. Please refer to Appendix C with the most recent updates.</p>
+<div id="key-tasks-of-benchmarks" class="section level4">
+<h4>Key tasks of benchmarks:</h4>
+<p>Evaluate memory usage and computation time of the procedure of super learner fitting, tmle updates, and variance estimations; at different sample sizes, SL options, SI and MSM model choices, and variance methods.</p>
+<p>Evaluate potential impact of different levels of finite sample positivity violation and rare outcomes; with simulated known distribution or summary statistics.</p>
+<p>Finalize ltmle options and necessary code modifications (such as parallel SL, stochastic intervention, performance improvement for large data tables, etc.).</p>
+</div>
+<div id="default-libraries" class="section level4">
+<h4>Default libraries:</h4>
+<p>list(“SL.glm”, “SL.stepAIC”, “SL.bayesglm”, c(“SL.glm”, “screen.corP”), c(“SL.step”, “screen.corP”), c(“SL.step.forward”, “screen.corP”), c(“SL.stepAIC”, “screen.corP”), c(“SL.step.interaction”, “screen.corP”), c(“SL.bayesglm”, “screen.corP”)</p>
+</div>
 </div>
 
 

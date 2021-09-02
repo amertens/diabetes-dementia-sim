@@ -8,6 +8,10 @@ navbar:
       href: calc_time_nodes.html  
     - text: "L-TMLE analysis"
       href: ltmle.html    
+    - text: "MSM dataset creation"
+      href: ltmle.html    
+    - text: "MSM L-TMLE analysis"
+      href: MSM.html    
 
 output_dir: "."
 output:
