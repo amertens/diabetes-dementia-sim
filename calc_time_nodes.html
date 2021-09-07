@@ -543,25 +543,25 @@ div.tocify {
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>, <span class="st">&#39;:=&#39;</span> (<span class="fu">paste0</span>(<span class="st">&quot;A1_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">mget</span>(<span class="fu">paste0</span>(<span class="st">&quot;i.V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))), on <span class="ot">=</span> <span class="st">&quot;pnr&quot;</span>]</span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>dt_tmle[<span class="fu">which</span>(if_glp1_group), ]</span></code></pre></div>
 <pre><code>##    pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1 A1_2
-## 1: 485 58.96617   0          TRUE      2019-01-01          2016-08-14    1    0
-## 2: 843 67.21393   1          TRUE      2019-06-07          2015-04-15    1    0
-## 3: 991 71.61475   0          TRUE      2019-05-29          2015-02-28    1    0
+## 1: 485 58.95522   0          TRUE      2019-01-01          2016-08-14    1    0
+## 2: 843 67.20297   1          TRUE      2019-06-07          2015-04-15    1    0
+## 3: 991 71.60379   0          TRUE      2019-05-29          2015-02-28    1    0
 ##    A1_3 A1_4 A1_5
 ## 1:    0    0    0
 ## 2:    0    0    0
 ## 3:    0    0    0</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dt_tmle <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##     pnr      age sex if_glp1_group first_date_glp1 first_date_2nd_line A1_1
-##  1:   3 65.93497   0         FALSE      2015-05-01          2015-01-01    1
-##  2:   7 55.09095   1         FALSE            &lt;NA&gt;          2015-09-12    0
-##  3:  11 50.25685   0         FALSE      2015-03-30          2015-03-30    1
-##  4:  18 52.09644   0         FALSE      2015-01-01          2015-01-01    1
-##  5:  23 65.47080   0         FALSE      2015-07-10          2015-05-06    1
-##  6:  28 71.93966   0         FALSE      2015-07-25          2015-07-25    1
-##  7:  33 77.80931   1         FALSE      2015-01-01          2015-01-01    1
-##  8:  35 76.62489   0         FALSE      2015-01-01          2015-01-01    1
-##  9:  38 66.13085   0         FALSE      2015-06-14          2015-06-14    1
-## 10:  49 53.71577   0         FALSE      2015-12-10          2015-05-25    1
+##  1:   3 65.92402   0         FALSE      2015-05-01          2015-01-01    1
+##  2:   7 55.08000   1         FALSE            &lt;NA&gt;          2015-09-12    0
+##  3:  11 50.24590   0         FALSE      2015-03-30          2015-03-30    1
+##  4:  18 52.08549   0         FALSE      2015-01-01          2015-01-01    1
+##  5:  23 65.45985   0         FALSE      2015-07-10          2015-05-06    1
+##  6:  28 71.92871   0         FALSE      2015-07-25          2015-07-25    1
+##  7:  33 77.79836   1         FALSE      2015-01-01          2015-01-01    1
+##  8:  35 76.61394   0         FALSE      2015-01-01          2015-01-01    1
+##  9:  38 66.11990   0         FALSE      2015-06-14          2015-06-14    1
+## 10:  49 53.70481   0         FALSE      2015-12-10          2015-05-25    1
 ##     A1_2 A1_3 A1_4 A1_5
 ##  1:    0    0    1    1
 ##  2:    0    0    0    0
@@ -696,7 +696,7 @@ C_5
 3
 </td>
 <td style="text-align:right;">
-65.93497
+65.92402
 </td>
 <td style="text-align:right;">
 0
@@ -776,7 +776,7 @@ FALSE
 7
 </td>
 <td style="text-align:right;">
-55.09095
+55.08000
 </td>
 <td style="text-align:right;">
 1
@@ -856,7 +856,7 @@ NA
 11
 </td>
 <td style="text-align:right;">
-50.25685
+50.24590
 </td>
 <td style="text-align:right;">
 0
@@ -936,7 +936,7 @@ FALSE
 18
 </td>
 <td style="text-align:right;">
-52.09644
+52.08549
 </td>
 <td style="text-align:right;">
 0
@@ -1016,7 +1016,7 @@ FALSE
 23
 </td>
 <td style="text-align:right;">
-65.47080
+65.45985
 </td>
 <td style="text-align:right;">
 0
@@ -1096,7 +1096,7 @@ FALSE
 28
 </td>
 <td style="text-align:right;">
-71.93966
+71.92871
 </td>
 <td style="text-align:right;">
 0
@@ -1176,7 +1176,7 @@ FALSE
 33
 </td>
 <td style="text-align:right;">
-77.80931
+77.79836
 </td>
 <td style="text-align:right;">
 1
@@ -1256,7 +1256,7 @@ FALSE
 35
 </td>
 <td style="text-align:right;">
-76.62489
+76.61394
 </td>
 <td style="text-align:right;">
 0
@@ -1336,7 +1336,7 @@ FALSE
 38
 </td>
 <td style="text-align:right;">
-66.13085
+66.11990
 </td>
 <td style="text-align:right;">
 0
@@ -1416,7 +1416,7 @@ FALSE
 49
 </td>
 <td style="text-align:right;">
-53.71577
+53.70481
 </td>
 <td style="text-align:right;">
 0
