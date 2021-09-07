@@ -133,7 +133,7 @@ simPrescriptionData_atc <- function (n, max.prescriptions = 37, packages = list(
 ```{r}
 set.seed(12345)
 sim <- simPrescriptionData_atc(5)
-knitr::kable(dt_tmle)
+knitr::kable(sim)
 
 ```
 

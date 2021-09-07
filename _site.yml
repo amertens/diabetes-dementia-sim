@@ -11,7 +11,7 @@ navbar:
     - text: "MSM dataset creation"
       href: ltmle.html    
     - text: "MSM L-TMLE analysis"
-      href: MSM.html    
+      href: msm.html    
 
 output_dir: "."
 output:

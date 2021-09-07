@@ -1,12 +1,5 @@
----
-title: "Longitudinal TMLE applied to simulated data"
-output:
-  html_document:
-    toc: true  
-    toc_float: true  
----
 
-```{r, include=F}
+  
 rm(list=ls())
 library(dplyr)
 library(data.table)
@@ -21,9 +14,6 @@ library(data.table)
 }
 library(hal9001)
 library(pryr)
-
-test <- readRDS(file = paste0(here::here(),"/data/msm_res.rds"))
-
 
 ###
 # demonstration of simulated outcome distribution
@@ -50,22 +40,22 @@ for (i in 1:10) {
   dt_tmle[, paste0("A1_", i) := sample(0:1, nrow(dt_tmle), replace = T)]
 }
 # add more "treated" subjects to make positivity issue less severe for now
-dt_tmle <- dt_tmle[c(sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 10), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 9), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 8), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 7), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 6), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 5), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 4), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 3), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 2), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 1), 10000, T),
-                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 0), 10000, T),
+dt_tmle <- dt_tmle[c(sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 10), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 9), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 8), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 7), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 6), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 5), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 4), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 3), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 2), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 1), 10000, T), 
+                     sample(which((dt_tmle[, paste0("A1_", 1:10)] %>% rowSums) == 0), 10000, T), 
                      sample(nrow(dt_tmle), 10000, T)), ]
 
 
-K <- 10
-node_names <- c("age", "sex", "L_0",
+K <- 10 
+node_names <- c("age", "sex", "L_0", 
                 "first_date_2nd_line",
                 expand.grid(c("L", "Y", "A1", "C"), as.character(1:(K+1))) %>% apply(1, function(row) paste0(row, collapse = "_"))
 )
@@ -96,7 +86,7 @@ for (i in 2:10) {
 # dt_use[, Y_1 := 1-rbinom(nrow(dt_use), 1, expit(3))]
 dt_use[, Y_1 := 0]
 for (i in 2:11) {
-  risk_set <- !is.na(dt_use[[paste0("Y_", i-1)]]) & dt_use[[paste0("Y_", i-1)]] == 0 & dt_use[[paste0("C_", i-1)]] == 1
+  risk_set <- !is.na(dt_use[[paste0("Y_", i-1)]]) & dt_use[[paste0("Y_", i-1)]] == 0 & dt_use[[paste0("C_", i-1)]] == 1 
   if (i==2) prev_accumulated_time <- rep(0, nrow(dt_use)) else prev_accumulated_time <- dt_use[, paste0("A1_", 1:(i-2)), with=F] %>% rowSums
   accumulated_time <- dt_use[, paste0("A1_", 1:(i-1)), with=F] %>% rowSums
   if (i > 2) {
@@ -141,7 +131,7 @@ dt_use <- dt_use_backup[sample(nrow(dt_use_backup), 10000, T), ]
 # deterministic censoring
 administrativeCensoring <- function(data, current.node, nodes, last_day = max.date, which_baseline_date = 4) {
   Cnodes <- nodes$C
-  if (!(current.node %in% Cnodes))
+  if (!(current.node %in% Cnodes)) 
     return(NULL)
   current_t <- which(Cnodes == current.node)  # this is the censored t
   temp_t <- floor((last_day - data[[which_baseline_date]]) / (365.25/2)) + 1
@@ -176,7 +166,7 @@ test.treated[, 1, 1] %>% table
 
 summary.measures <- summary.measures[test.treated[, 1, 1], , ]
 
-```
+
 
 
 
@@ -184,7 +174,6 @@ summary.measures <- summary.measures[test.treated[, 1, 1], , ]
 
 ### Fit L-TMLE MSM
 
-```{r, eval=F}
 for (j in 1:n_pool) {
   colnames(summary.measures[, , j]) <- c("time.on.treatment", "time")
 }
@@ -220,13 +209,14 @@ colnames(summary.measures) <- c("time.on.treatment", "time")
 ss  # MEM change in MB
 test  # coef est
 difftime(end_time, start_time, units = "mins")  # time in min
- 
-```
+
+saveRDS(test, file = paste0(here::here(),"/data/msm_res.rds"))
+
+
 
 
 ### Plot
 
-```{r}
 ll <- 10
 expit(test$beta[1] + test$beta[3] * (1:ll) + test$beta[2]*c((1:ll))) %>% plot(x = 1:ll, type = "l", ylim = c(0.00, 0.3), ylab = "Risk", xlab = "t")
 expit(test$beta[1] + test$beta[3] * (1:ll) + test$beta[2]*c((1:ll) - 1)) %>% lines(x = 1:ll, col = "blue")
@@ -242,6 +232,5 @@ legend(x = "topleft",          # Position
        legend = c("Estimate", "Target", "Missing 2", "Missing 1", "Full exposure"),  # Legend texts
        lty = c(1, 2, 1, 1, 1),           # Line types
        col = c("black", "black", "red", "blue", "black")
-       )
+)
 
-```
